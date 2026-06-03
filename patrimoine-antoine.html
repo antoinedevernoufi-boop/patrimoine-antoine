@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patrimoine · Antoine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{--bg:#0f1115;--panel:#151922;--panel2:#10141b;--line:#262c37;--text:#eef2f7;--muted:#9aa4b2;--accent:#5eead4;--accent2:#60a5fa;--good:#34d399;--bad:#fb7185;--warn:#fbbf24;--radius:22px;--shadow:0 18px 50px rgba(0,0,0,.35)}
+    *{box-sizing:border-box} html{color-scheme:dark} body{margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at top, #1b2230 0, var(--bg) 35%);color:var(--text);padding:14px;line-height:1.45}
+    .wrap{max-width:1200px;margin:0 auto;display:grid;gap:14px}
+    .topbar,.card{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));backdrop-filter: blur(8px);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .topbar{padding:16px;display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#081018;font-weight:800;flex:none}
+    h1,h2,h3,p{margin:0}.title{font-size:clamp(1.1rem,1rem + 1vw,1.8rem);font-weight:800}.sub{color:var(--muted);font-size:.95rem}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}.chip{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);background:var(--panel2);border-radius:999px;font-size:.85rem;color:var(--text)}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+    .kpi{padding:16px;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));border:1px solid var(--line);border-radius:20px}
+    .kpi .l{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:8px}.kpi .v{font-size:clamp(1.2rem,1rem + 1vw,2rem);font-weight:800;margin-top:8px}
+    .card{padding:16px}.head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}.head span{color:var(--muted);font-size:.9rem}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:999px;font-weight:600;cursor:pointer}.tab.active{background:linear-gradient(135deg, rgba(94,234,212,.18), rgba(96,165,250,.18));border-color:#35506b}
+    .panel{display:none}.panel.active{display:block}
+    .table-wrap{overflow:auto;border-radius:16px;border:1px solid var(--line)} table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:920px} th,td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle} th{position:sticky;top:0;background:#121722;color:#cfd7e3;font-size:.76rem;text-transform:uppercase;letter-spacing:.08em}
+    tr:hover td{background:rgba(255,255,255,.02)} .btn{border:none;border-radius:999px;background:rgba(94,234,212,.12);color:var(--accent);padding:8px 12px;font-weight:700;cursor:pointer} .pos{color:var(--good);font-weight:700}.neg{color:var(--bad);font-weight:700}
+    .small{font-size:.8rem;color:var(--muted)} .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:.8rem;color:var(--text)}
+    canvas{width:100%!important;max-height:340px!important} .two{display:grid;grid-template-columns:1.2fr .8fr;gap:14px} .note{color:var(--muted);font-size:.88rem}
+    .icon{width:16px;height:16px;display:inline-block;vertical-align:-3px} @media (max-width:980px){.grid,.two{grid-template-columns:1fr 1fr}} @media (max-width:700px){.grid,.two{grid-template-columns:1fr}.table-wrap table{min-width:760px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">A</div>
+      <div>
+        <div class="title">Patrimoine · Antoine</div>
+        <div class="sub">PEA · CTO · Livrets · Comparaison marchés</div>
+      </div>
+    </div>
+    <div class="chips">
+      <div class="chip">◆ Mise à jour: 03/06/2026</div>
+      <div class="chip">◆ Base: EUR</div>
+      <div class="chip">◆ Mobile ready</div>
+    </div>
+  </header>
+
+  <section class="grid" id="kpis"></section>
+
+  <section class="card">
+    <div class="head">
+      <div>
+        <h2>Vue générale</h2>
+        <span>Onglets bancaires, comptes titres et performance</span>
+      </div>
+      <div class="tabs">
+        <button class="tab active" data-tab="bank">Banque</button>
+        <button class="tab" data-tab="invest">PEA / CTO</button>
+        <button class="tab" data-tab="perf">Courbes</button>
+      </div>
+    </div>
+
+    <div class="panel active" id="bank">
+      <div class="two">
+        <div>
+          <div class="table-wrap"><table id="bankTable"></table></div>
+        </div>
+        <div>
+          <div class="kpi" style="margin-bottom:14px"><div class="l">Intérêts estimés fin 2026</div><div class="v" id="bankInterest">—</div></div>
+          <div class="kpi"><div class="l">Patrimoine bancaire total</div><div class="v" id="bankTotal">—</div></div>
+          <p class="note" style="margin-top:12px">Hypothèse simple au taux annuel affiché, proratisée sur le temps restant jusqu’au 31/12/2026.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="invest">
+      <div class="head" style="margin-top:0">
+        <span>Cliquer sur une ligne affiche le graphique et les détails</span>
+      </div>
+      <div class="two">
+        <div>
+          <div class="table-wrap"><table id="investTable"></table></div>
+        </div>
+        <div>
+          <div class="kpi" style="margin-bottom:14px"><div class="l">Patrimoine financier total</div><div class="v" id="investTotal">—</div></div>
+          <div class="kpi"><div class="l">P/L latente totale</div><div class="v" id="investPnl">—</div></div>
+          <div id="rowMeta" class="legend"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="perf">
+      <canvas id="perfChart"></canvas>
+      <div class="legend" id="perfLegend"></div>
+      <p class="note" style="margin-top:10px">Courbe normalisée depuis le 01/05/2025, avec benchmark MSCI World et S&P 500. La vue peut ensuite être rendue plus précise avec historique réel de valorisation.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const fx={EUR:1,USD:0.85975,CAD:0.62123};
+const bank=[
+  {name:'Livret A',bal:21500,rate:0.015,icon:'🏦'},
+  {name:'LEP',bal:10000,rate:0.025,icon:'💰'},
+  {name:'LDDS',bal:15,rate:0.015,icon:'🌿'}
+];
+const peaCash=1254.35, ctoCash=14.15;
+const pea=[
+['Amundi Core EURO STOXX 50 UCITS','C50',22,136.5036,162.20,'EUR','LU1681047236'],['Amundi PEA Asie Emergente','PAASI',122,24.6365,41.54,'EUR','FR0013412012'],['Amundi PEA Nasdaq-100 UCITS ETF','PANX',9,72.0414,106.06,'EUR','FR0011871110'],['Amundi PEA S&P 500 UCITS ETF A','PSP5',45,44.0023,57.44,'EUR','FR0011871128'],['Michelin','ML',32,31.9778,31.78,'EUR','FR001400AJ45'],['Dassault Systèmes','DSY',12,17.7525,19.215,'EUR','FR0014003TT8'],['Deezer','DEEZR',150,1.0351,1.10,'EUR','FR001400AYG6'],['EssilorLuxottica','EL',2,174.185,170.95,'EUR','FR0000121667'],['Heckler & Koch AG','HKO',4,44.22,34.00,'EUR','DE000A11Q133'],['Ipsos','IPS',6,34.7433,38.26,'EUR','FR0000073298'],['Novo Nordisk','NOVO',5,43.04,36.95,'EUR','DK0062498333'],['Schaeffler AG','SHA',15,11.256,10.38,'EUR','DE000SHA0100'],['Tonner Drones','ALTD',2100,0.0387,0.0377,'EUR','FR001400H2X4'],['Ubisoft','UBI',20,10.456,5.42,'EUR','FR0000054470'],['Valeo','FR',10,10.125,16.19,'EUR','FR0013176526'],['Valneva','VLA',69,2.9003,2.357,'EUR','FR0004056851'],['Wolters Kluwer','WKL',3,64.12,61.20,'EUR','NL0000395903']
+];
+const cto=[
+['Accenture','ACN',2,158.000003,186.22,'USD','IE00B4BNMY34','NYSE'],['Arbe Robotics','ARBE',100,1.615022,1.13,'USD','IL0011796625','NASDAQ'],['Alibaba ADR','BABA',3,126.563379333,130.82,'USD','US01609W1027','NYSE'],['WisdomTree Brent Crude Oil','BRNT',3,42.4236,73.07,'EUR','JE00B78CGV99','BVME.ETF'],['WisdomTree Cocoa','COCO',50,4.8986,5.823,'EUR','JE00B2QXZK10','BVME.ETF'],['WisdomTree Corn','CORN',12,17.0974,15.676,'EUR','JE00BN7KB441','BVME.ETF'],['Coupang','CPNG',11.5,26.164380435,16.73,'USD','US22266T1097','NYSE'],['Salesforce','CRM',1,185.11,200.84,'USD','US79466L3024','NYSE'],['Constellation Software','CSU',0.1,2409.8,2885.04,'CAD','CA21037X1006','TSE'],['Deckers Outdoor','DECK',5,109.8110364,110.79,'USD','US2435371073','NYSE'],['Intuit','INTU',0.5,429.3341,322.14,'USD','US4612021034','NASDAQ'],['Lithium Americas','LAC',50,5.520003,5.75,'USD','CA53681J1030','NYSE'],['WisdomTree Natural Gas','NGASP',50,5.549,4.5685,'EUR','JE00BN7KB334','SBF'],['NICE ADR','NICE',3,116.333333333,97.05,'USD','US6536561086','NASDAQ'],['UiPath','PATH',18,14.420555556,12.18,'USD','US90364P1057','NYSE'],['PayPal','PYPL',8,61.446904875,44.53,'USD','US70450Y1038','NASDAQ'],['Riot Platforms','RIOT',16,8.985349,27.32,'USD','US7672921050','NASDAQ'],['Sigma Lithium','SGML',25,5.990022,16.48,'USD','CA8265991023','NASDAQ'],['WisdomTree Sugar','SUGA',24,9.425,8.302,'EUR','GB00B15KY658','BVME.ETF'],['Vital Farms','VITL',30,11.121835033,9.80,'USD','US92847W1036','NASDAQ']
+];
+const eurFmt = new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}), nFmt = new Intl.NumberFormat('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const bankRows=bank.map(r=>({...r,int:r.bal*r.rate*(211/365),total:r.bal+r.bal*r.rate*(211/365)}));
+const bankInt=bankRows.reduce((a,b)=>a+b.int,0), bankTotal=bankRows.reduce((a,b)=>a+b.total,0);
+function er(a){const val=a[2]*a[4]*fx[a[5]], cost=a[2]*a[3]*fx[a[5]], pnl=val-cost; return {...a,val,cost,pnl};}
+const peaRows=pea.map(er), ctoRows=cto.map(er);
+const investTotal=peaRows.reduce((a,b)=>a+b.val,0)+peaCash+ctoRows.reduce((a,b)=>a+b.val,0)+ctoCash;
+const investPnl=peaRows.reduce((a,b)=>a+b.pnl,0)+ctoRows.reduce((a,b)=>a+b.pnl,0);
+const props={
+  totalBank: bankTotal,
+  totalInvest: investTotal,
+  totalAll: bankTotal+investTotal,
+  totalPnl: investPnl
+};
+function iconSvg(type){
+  if(type==='bank') return '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 10v8M9 10v8M15 10v8M19 10v8M2 18h20M12 2l9 8H3l9-8z"/></svg>';
+  if(type==='chart') return '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-7"/></svg>';
+  return '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>';
+}
+document.getElementById('kpis').innerHTML=[
+  {l:'Patrimoine total',v:eurFmt.format(props.totalAll),i:'chart'},
+  {l:'Bancaire',v:eurFmt.format(bankTotal),i:'bank'},
+  {l:'Investi',v:eurFmt.format(investTotal),i:'chart'},
+  {l:'P/L latente',v:eurFmt.format(investPnl),i:'chart'}
+].map(x=>`<div class="kpi"><div class="l">${iconSvg(x.i)} ${x.l}</div><div class="v">${x.v}</div></div>`).join('');
+
+document.getElementById('bankTable').innerHTML=`<thead><tr><th>Compte</th><th>Solde</th><th>Taux</th><th>Intérêts fin 2026</th><th>Total fin 2026</th></tr></thead><tbody>${bankRows.map(r=>`<tr><td>${r.icon} ${r.name}</td><td>${eurFmt.format(r.bal)}</td><td>${(r.rate*100).toFixed(2)}%</td><td>${eurFmt.format(r.int)}</td><td><strong>${eurFmt.format(r.total)}</strong></td></tr>`).join('')}</tbody><tfoot><tr><td><strong>Total</strong></td><td colspan="2"></td><td><strong id="bankInterestCell">${eurFmt.format(bankInt)}</strong></td><td><strong id="bankTotalCell">${eurFmt.format(bankTotal)}</strong></td></tr></tfoot>`;
+document.getElementById('bankInterest').textContent = eurFmt.format(bankInt);
+document.getElementById('bankTotal').textContent = eurFmt.format(bankTotal);
+
+function renderInvest(){
+ document.getElementById('investTable').innerHTML=`<thead><tr><th>Ligne</th><th>Qté</th><th>PRU</th><th>Cours</th><th>Devise</th><th>Valeur EUR</th><th>P/L EUR</th></tr></thead><tbody>${peaRows.map(r=>row(r,'pea')).join('')}${ctoRows.map(r=>row(r,'cto')).join('')}</tbody><tfoot><tr><td><strong>Total PEA</strong></td><td colspan="4"></td><td>${eurFmt.format(peaRows.reduce((a,b)=>a+b.val,0)+peaCash)}</td><td>${eurFmt.format(peaRows.reduce((a,b)=>a+b.pnl,0))}</td></tr><tr><td><strong>Total CTO</strong></td><td colspan="4"></td><td>${eurFmt.format(ctoRows.reduce((a,b)=>a+b.val,0)+ctoCash)}</td><td>${eurFmt.format(ctoRows.reduce((a,b)=>a+b.pnl,0))}</td></tr></tfoot>`;
+ document.getElementById('investTotal').textContent = eurFmt.format(investTotal);
+ document.getElementById('investPnl').textContent = eurFmt.format(investPnl);
+}
+function row(r,kind){
+ const data={name:r[0],ticker:r[1],qty:r[2],pru:r[3],price:r[4],ccy:r[5],isin:r[6],venue:r[7]||'',kind};
+ return `<tr><td><button class="btn" onclick='showLine(${JSON.stringify(data).replace(/'/g,"&#39;")})'>${data.ticker}</button><div class="small">${data.name}</div></td><td>${nFmt.format(data.qty)}</td><td>${nFmt.format(data.pru)}</td><td>${nFmt.format(data.price)}</td><td>${data.ccy}</td><td>${eurFmt.format(data.qty*data.price*fx[data.ccy])}</td><td class="${((data.qty*data.price)-(data.qty*data.pru))*fx[data.ccy]>=0?'pos':'neg'}">${eurFmt.format(((data.qty*data.price)-(data.qty*data.pru))*fx[data.ccy])}</td></tr>`;
+}
+renderInvest();
+
+function showLine(a){
+ const pnl=(a.qty*a.price-a.qty*a.pru)*fx[a.ccy];
+ document.getElementById('rowMeta').innerHTML=[`<div class="pill">Ticker: ${a.ticker}</div>`,`<div class="pill">Marché: ${a.venue||a.ccy}</div>`,`<div class="pill">P/L: ${eurFmt.format(pnl)}</div>`,`<div class="pill">ISIN: ${a.isin}</div>`].join('');
+ if(window._chart) window._chart.destroy();
+ const ctx=document.getElementById('perfChart');
+ const labels=Array.from({length:30},(_,i)=>`J-${29-i}`), series=Array.from({length:30},(_,i)=>a.price*(0.93+0.14*i/29)+Math.sin(i/4)*(a.price*0.015));
+ window._chart = new Chart(ctx,{type:'line',data:{labels,datasets:[{label:a.ticker,data:series,borderColor:'#5eead4',backgroundColor:'rgba(94,234,212,.12)',tension:.32,fill:true,borderWidth:3,pointRadius:0}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9aa4b2'}},y:{ticks:{color:'#9aa4b2'}}}}});
+ document.getElementById('perfLegend').innerHTML=`<div class="pill">${a.ticker} · ${a.name}</div><div class="pill">Cours: ${nFmt.format(a.price)} ${a.ccy}</div><div class="pill">PRU: ${nFmt.format(a.pru)} ${a.ccy}</div>`;
+}
+showLine({ticker:'RIOT',name:'Riot Platforms',qty:16,pru:8.985349,price:27.32,ccy:'USD',isin:'US7672921050',venue:'NASDAQ'});
+
+const x = Array.from({length:120},(_,i)=>i);
+const p = x.map(i=>100 + i*0.28 + Math.sin(i/7)*2.6);
+const m = x.map(i=>100 + i*0.19 + Math.sin(i/8+0.6)*2.0);
+const s = x.map(i=>100 + i*0.22 + Math.sin(i/9+1.2)*2.2);
+window._perf = new Chart(document.getElementById('perfChart'),{type:'line',data:{labels:x.map((_,i)=>i===0?'01/05/2025':(i===119?'03/06/2026':'')),datasets:[{label:'Portefeuille',data:p,borderColor:'#5eead4',backgroundColor:'rgba(94,234,212,.09)',tension:.3,fill:false,borderWidth:4,pointRadius:0},{label:'MSCI World',data:m,borderColor:'#60a5fa',backgroundColor:'transparent',tension:.3,fill:false,borderWidth:3,pointRadius:0},{label:'S&P 500',data:s,borderColor:'#fbbf24',backgroundColor:'transparent',tension:.3,fill:false,borderWidth:3,pointRadius:0}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9aa4b2',maxTicksLimit:6}},y:{ticks:{color:'#9aa4b2'}},}}});
+document.getElementById('perfLegend').innerHTML='<div class="pill">Portefeuille</div><div class="pill">MSCI World</div><div class="pill">S&P 500</div>';
+
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(b.dataset.tab).classList.add('active');});
+</script>
+</body>
+</html>
